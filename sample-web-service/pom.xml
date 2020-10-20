@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.example</groupId>
+    <artifactId>sample-web-service</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <dropwizard-one-version>1.3.17-SNAPSHOT</dropwizard-one-version>
+    </properties>
+    <dependencies>
+        <!-- Compile dependencies -->
+        <dependency>
+            <groupId>com.flipkart.utils</groupId>
+            <artifactId>dropwizard-one-core</artifactId>
+            <version>${dropwizard-one-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>6.0.6</version>
+        </dependency>
+        <!-- Test dependencies -->
+        <dependency>
+            <groupId>com.flipkart.utils</groupId>
+            <artifactId>dropwizard-one-testing</artifactId>
+            <version>${dropwizard-one-version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.6</version>
+                <executions>
+                    <execution>
+                        <id>webservice-prepare</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                        <configuration>
+                            <propertyName>surefireArgLine</propertyName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>webservice-report</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>webservice-report-aggregate</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report-aggregate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.4</version>
+                <configuration>
+                    <createDependencyReducedPom>false</createDependencyReducedPom>
+                    <filters>
+                        <filter>
+                            <artifact>*:*</artifact>
+                            <excludes>
+                                <exclude>META-INF/*.SF</exclude>
+                                <exclude>META-INF/*.DSA</exclude>
+                                <exclude>META-INF/*.RSA</exclude>
+                            </excludes>
+                        </filter>
+                    </filters>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>com.example.employeeportal.EmployeeApplication</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.2</version>
+                <executions>
+                    <execution>
+                        <id>default-test</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <argLine>
+                                ${surefireArgLine} -Djava.security.manager -Djava.security.policy=${basedir}/src/test/resources/java.policy
+                            </argLine>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+                    <argLine>
+                        -Djava.security.manager -Djava.security.policy=${basedir}/src/test/resources/java.policy -Djunit.jupiter.testinstance.lifecycle.default=per_class
+                    </argLine>
+                    <properties>
+                        <configurationParameters>
+                            junit.jupiter.extensions.autodetection.enabled = true
+                            junit.jupiter.testinstance.lifecycle.default = per_class
+                            junit.jupiter.execution.parallel.enabled = true
+                        </configurationParameters>
+                    </properties>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

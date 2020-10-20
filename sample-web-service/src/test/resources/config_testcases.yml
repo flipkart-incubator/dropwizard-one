@@ -1,0 +1,35 @@
+welcomeMessage: Test cases running for Employee web service
+
+server:
+  applicationConnectors:
+    - type: http
+      port: 40001
+  adminConnectors:
+    - type: http
+      port: 40002
+  idleThreadTimeout: 2000s
+  requestLog:
+    appenders:
+      - type: console
+
+logging:
+  level: WARN
+  appenders:
+    - type: console
+      timeZone: IST
+
+database:
+  driverClass: com.mysql.cj.jdbc.Driver
+  user: root
+  password: ""
+  url: jdbc:mysql://localhost/employee_portal_test?autoReconnect=true&useSSL=false&nullNamePatternMatchesAll=true
+  properties:
+    hibernate.format_sql: true
+    hibernate.show_sql: false
+    charSet: UTF-8
+    hibernate.dialect: org.hibernate.dialect.MySQL57Dialect
+    hibernate.generate_statistics: false
+    hibernate.current_session_context_class: managed
+  maxWaitForConnection: 1s
+  validationQuery: "/* Health Check */ SELECT 1"
+  logValidationErrors: true

@@ -1,0 +1,13 @@
+/.idea/
+*.iml
+*/target/
+*.txt
+azkaban-access.log
+azkaban-webserver.log
+derby.log
+.DS_Store
+*/pom.xml.releaseBackup
+pom.xml.releaseBackup
+*.releaseBackup
+release.properties
+/target/

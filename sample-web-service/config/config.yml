@@ -1,0 +1,39 @@
+welcomeMessage: Welcome to Employee Web Service!
+
+server:
+  applicationConnectors:
+    - type: http
+      port: 30001
+  adminConnectors:
+    - type: http
+      port: 30002
+  idleThreadTimeout: 2000s
+  requestLog:
+    appenders:
+      - type: file
+        currentLogFilename: "/tmp/employee-service-requests.log"
+        archive: false
+        timeZone: Asia/Calcutta
+      - type: console
+
+logging:
+  level: INFO
+  appenders:
+    - type: console
+      timeZone: IST
+
+database:
+  driverClass: com.mysql.cj.jdbc.Driver
+  user: root
+  password: ""
+  url: jdbc:mysql://localhost/employee_portal_dev?autoReconnect=true&useSSL=false&nullNamePatternMatchesAll=true
+  properties:
+    hibernate.format_sql: true
+    hibernate.show_sql: false
+    charSet: UTF-8
+    hibernate.dialect: org.hibernate.dialect.MySQL57Dialect
+    hibernate.generate_statistics: false
+    hibernate.current_session_context_class: managed
+  maxWaitForConnection: 1s
+  validationQuery: "/* Health Check */ SELECT 1"
+  logValidationErrors: true
